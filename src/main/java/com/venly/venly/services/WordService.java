@@ -32,13 +32,13 @@ public class WordService {
 
         if (null == firstByWord) {
             firstByWord = new Words();
-            firstByWord.setWord(wordDto.getFirstWord());
+            firstByWord.setWord(wordDto.getFirstWord().trim().toLowerCase());
             firstByWord = wordRepo.save(firstByWord);
         }
 
         if (null == secondWord) {
             secondWord = new Words();
-            secondWord.setWord(wordDto.getSecondWord());
+            secondWord.setWord(wordDto.getSecondWord().trim().toLowerCase());
             secondWord = wordRepo.save(secondWord);
         }
 
@@ -47,7 +47,7 @@ public class WordService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel(StatusCode.CONFLICT.getCode(), StatusCode.CONFLICT.getDescription()));
 
         WordRelation wordRelation = new WordRelation();
-        wordRelation.setRelation(wordDto.getRelation());
+        wordRelation.setRelation(wordDto.getRelation().trim().toLowerCase());
         wordRelation.setFirstWordId(firstByWord.getId());
         wordRelation.setSecondWordId(secondWord.getId());
         wordRelationRepo.save(wordRelation);
