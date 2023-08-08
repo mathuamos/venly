@@ -57,11 +57,17 @@ public class WordService {
 
 
     public ResponseEntity<?> getAllWordsWithRelationShip() {
-        
+
         Iterable<WordRelation> wordRelations=wordRelationRepo.findAll();
         List<String> words=new ArrayList<>();
+
         wordRelations.forEach(node->{
-            words.add(node.getFirstWordsLink().getWord()+" "+node.getSecondWordsLink().getWord()+" "+node.getRelation());
+            words.add(node.getSecondWordsLink().getWord()+" "+node.getFirstWordsLink().getWord()+" "+node.getRelation() + " no");
+        });
+
+
+        wordRelations.forEach(node->{
+            words.add(node.getFirstWordsLink().getWord()+" "+node.getSecondWordsLink().getWord()+" "+node.getRelation() + " yes");
         });
         return ResponseEntity.ok(words);
     }
