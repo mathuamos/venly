@@ -15,4 +15,7 @@ public interface WordRelationRepo extends CrudRepository<WordRelation,Long> {
 
     List<WordRelation> findAllByRelation(String relation);
 
+    WordRelation findByFirstWordId(Long sourceWord);
+    WordRelation findBySecondWordId( Long targetWord);
+
 }

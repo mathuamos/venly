@@ -29,4 +29,11 @@ public class WordController {
     public ResponseEntity<?> getWordByRelationShip(@PathVariable String relation ){
         return wordService.getWordByRelationShip(relation);
     }
+
+
+    @GetMapping("/searchPath")
+    public String searchPath(@RequestParam String source, @RequestParam String target) {
+        return wordService.findPath(source, target);
+    }
+
 }

@@ -10,4 +10,5 @@ public interface WordRepo extends CrudRepository<Words,Long> {
 
     Words findFirstByWord(String word);
 
+
 }

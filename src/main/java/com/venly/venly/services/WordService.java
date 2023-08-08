@@ -26,6 +26,7 @@ public class WordService {
     @Autowired
     private WordRelationRepo wordRelationRepo;
 
+    //create word and relation services
     public ResponseEntity<?> createWordAndRelation(WordDto wordDto) {
         Words firstByWord = wordRepo.findFirstByWord(wordDto.getFirstWord());
         Words secondWord = wordRepo.findFirstByWord(wordDto.getSecondWord());
@@ -63,8 +64,9 @@ public class WordService {
     }
 
 
-    public ResponseEntity<?> getAllWordsWithRelationShip() {
 
+    //get words with thier relation services
+    public ResponseEntity<?> getAllWordsWithRelationShip() {
         Iterable<WordRelation> wordRelations=wordRelationRepo.findAll();
         List<String> words=new ArrayList<>();
 
@@ -79,6 +81,7 @@ public class WordService {
         return ResponseEntity.ok(words);
     }
 
+    //filter words by relation
     public ResponseEntity<?> getWordByRelationShip(String relation) {
         List<String> words=new ArrayList<>();
         List<WordRelation> wordRelations=wordRelationRepo.findAllByRelation(relation);
@@ -87,6 +90,47 @@ public class WordService {
         });
         return ResponseEntity.ok(words);
 
+    }
+
+    //searchPath services
+    public String findPath(String sourceWord, String targetWord) {
+        Words sourceWords = wordRepo.findFirstByWord(sourceWord);
+        Words targetWords = wordRepo.findFirstByWord(targetWord);
+
+        WordRelation sourceRelation = findRelation(sourceWords);
+        WordRelation targetRelation = findRelation(targetWords);
+
+        if (sourceRelation != null && targetRelation != null) {
+            String sourceRelationString = sourceRelation.getRelation();
+            String destinationRelationString = targetRelation.getRelation();
+
+            String sourceOtherWord = getOtherWord(sourceWords, sourceRelation);
+            String destinationOtherWord = getOtherWord(targetWords, targetRelation);
+
+            if (sourceOtherWord.equalsIgnoreCase(destinationOtherWord)) {
+                return formatPath(sourceWord, sourceRelationString, sourceOtherWord, destinationRelationString, targetWord);
+            }
+        }
+
+        return "No valid path found.";
+    }
+
+    private WordRelation findRelation(Words words) {
+        WordRelation relation = wordRelationRepo.findByFirstWordId(words.getId());
+        if (relation == null) {
+            relation = wordRelationRepo.findBySecondWordId(words.getId());
+        }
+        return relation;
+    }
+
+    private String getOtherWord(Words words, WordRelation relation) {
+        return words.getWord().equalsIgnoreCase(relation.getFirstWordsLink().getWord())
+                ? relation.getSecondWordsLink().getWord()
+                : relation.getFirstWordsLink().getWord();
+    }
+
+    private String formatPath(String sourceWord, String sourceRelation, String sourceOtherWord, String destinationRelation, String targetWord) {
+        return String.format("%s ==(%s)=> %s ==(%s)=> %s", sourceWord, sourceRelation, sourceOtherWord, destinationRelation, targetWord);
     }
 
 
