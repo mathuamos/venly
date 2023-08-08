@@ -57,6 +57,7 @@ public class WordService {
 
 
     public ResponseEntity<?> getAllWordsWithRelationShip() {
+        
         Iterable<WordRelation> wordRelations=wordRelationRepo.findAll();
         List<String> words=new ArrayList<>();
         wordRelations.forEach(node->{
