@@ -46,6 +46,13 @@ public class WordService {
         if (wordRelationCheck.isPresent())
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel(StatusCode.CONFLICT.getCode(), StatusCode.CONFLICT.getDescription()));
 
+
+        wordRelationCheck = wordRelationRepo.findFirstByFirstWordIdAndSecondWordIdAndRelation(secondWord.getId(), firstByWord.getId(), wordDto.getRelation());
+        if (wordRelationCheck.isPresent())
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel(StatusCode.CONFLICTINVERSE.getCode(), StatusCode.CONFLICTINVERSE.getDescription()));
+
+
+
         WordRelation wordRelation = new WordRelation();
         wordRelation.setRelation(wordDto.getRelation().trim().toLowerCase());
         wordRelation.setFirstWordId(firstByWord.getId());

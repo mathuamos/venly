@@ -3,7 +3,8 @@ package com.venly.venly.utils;
 public enum StatusCode {
     SUCCESS("SUCCESS", "SUCCESSFUL"),
     ERROR("FAILED", "AN ERROR OCCURRED"),
-    CONFLICT("CONFLICT", "Relation already exists");
+    CONFLICT("CONFLICT", "Relation already exists"),
+    CONFLICTINVERSE("CONFLICT", "Inverse Relation not allowed");
 
 
     private String code;
