@@ -24,4 +24,9 @@ public class WordController {
     public ResponseEntity<?> getGetAll(){
         return wordService.getAllWordsWithRelationShip();
     }
+
+    @GetMapping("/filter/{relation}")
+    public ResponseEntity<?> getWordByRelationShip(@PathVariable String relation ){
+        return wordService.getWordByRelationShip(relation);
+    }
 }

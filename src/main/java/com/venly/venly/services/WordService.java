@@ -14,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -59,12 +57,23 @@ public class WordService {
 
 
     public ResponseEntity<?> getAllWordsWithRelationShip() {
-
         Iterable<WordRelation> wordRelations=wordRelationRepo.findAll();
-        Map<String,Object> map=new HashMap<>();
-        map.put("words",wordRelations);
-        return ResponseEntity.ok(new ResponseModel(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getDescription(),map));
+        List<String> words=new ArrayList<>();
+        wordRelations.forEach(node->{
+            words.add(node.getFirstWordsLink().getWord()+" "+node.getSecondWordsLink().getWord()+" "+node.getRelation());
+        });
+        return ResponseEntity.ok(words);
+    }
+
+    public ResponseEntity<?> getWordByRelationShip(String relation) {
+        List<String> words=new ArrayList<>();
+        List<WordRelation> wordRelations=wordRelationRepo.findAllByRelation(relation);
+        wordRelations.forEach(node->{
+            words.add(node.getFirstWordsLink().getWord()+" "+node.getSecondWordsLink().getWord()+" "+node.getRelation());
+        });
+        return ResponseEntity.ok(words);
 
     }
+
 
 }
